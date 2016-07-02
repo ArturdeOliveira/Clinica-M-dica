@@ -1,0 +1,79 @@
+<ui:composition template="/WEB-INF/template/LayoutPadrao.xhtml"
+	xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui" xmlns:o="http://omnifaces.org/ui">
+
+	<ui:define name="corpo">
+		<h1 class="aw-page-title">Medicamentos</h1>
+
+		<h:form id="frmPesquisa">
+			<p:toolbar>
+				<p:toolbarGroup align="right">
+					<p:commandButton value="Novo medicamento" icon="ui-icon-plus" 
+						id="botaoNovo" action="/medicamento/CadastroMedicamento.xhtml" />
+				</p:toolbarGroup>
+				<p:toolbarGroup>
+					<p:commandButton value="Pesquisa" icon="ui-icon-folder-collapsed"
+						id="botaoPesquisa" action="#{pesquisaMedicamentoBean.pesquisar}"
+						update="meTable" />
+				</p:toolbarGroup>
+			</p:toolbar>
+			
+			<p:messages id="messages" autoUpdate="true" closable="true" />
+			
+			<div class="ui-fluid">
+				<p:tabView style="margin-top: 10px" id="tabView">
+					<p:tab title="Dados de busca">
+						<p:panelGrid columns="2" layout="grid"
+							columnClasses="ui-grid-col-2, ui-grid-col-4, ui-grid-col-2, ui-grid-col-4"
+							styleClass="panelgrid-noborder">
+
+							<p:outputLabel value="Nome" for="nome" />
+							<p:inputText id="nome" size="100"
+								value="#{pesquisaMedicamentoBean.nome}" />
+							
+						</p:panelGrid>
+					</p:tab>
+				</p:tabView>
+			</div>
+
+			<p:dataTable id="meTable"
+				value="#{pesquisaMedicamentoBean.medicamentosFiltrados}"
+				var="medicamento" emptyMessage="Nenhuma medicamento encontrado."
+				rows="5" style="margin-top: 30px" paginator="true"
+				paginatorAlwaysVisible="true" paginatorPosition="bottom">
+
+				<p:column headerText="Nome" sortBy="#{medicamento.nome}">
+					<h:outputText value="#{medicamento.nome}" />
+				</p:column>
+
+				<p:column headerText="Acão" style="width: 100px; text-align: center">
+					<p:button outcome="CadastroMedicamento" icon="ui-icon-pencil"
+						title="Editar">
+						<f:param name="medicamento" value="#{medicamento.codigo}" />
+					</p:button>
+					<p:commandButton icon="ui-icon-trash" title="Excluir"
+						oncomplete="PF('confirmacaoExclusao').show();" process="@this"
+						update=":frmPesquisa:confirmacaoExclusaoDialog">
+						<f:setPropertyActionListener
+							target="#{pesquisaMedicamentoBean.medicamentoSelecionado}"
+							value="#{medicamento}" />
+					</p:commandButton>
+				</p:column>
+			</p:dataTable>
+
+			<p:confirmDialog responsive="true" id="confirmacaoExclusaoDialog"
+				widgetVar="confirmacaoExclusao"
+				message="Tem certeza que deseja excluir o medicamento #{pesquisaMedicamentoBean.medicamentoSelecionado.nome}?"
+				header="Exclusão de medicamento" severity="alert">
+				<p:commandButton value="Não"
+					onclick="PF('confirmacaoExclusao').hide(); return false;" />
+				<p:commandButton value="Sim" update=":frmPesquisa:meTable"
+					oncomplete="PF('confirmacaoExclusao').hide();"
+					action="#{pesquisaMedicamentoBean.excluir}" />
+			</p:confirmDialog>
+		</h:form>
+	</ui:define>
+</ui:composition>

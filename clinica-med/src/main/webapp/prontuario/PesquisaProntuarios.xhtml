@@ -1,0 +1,212 @@
+<ui:composition template="/WEB-INF/template/LayoutPadrao.xhtml"
+	xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+
+	<ui:define name="corpo">
+		<h1 class="aw-page-title">Prontuários</h1>
+
+		<h:form id="frmPesquisa">
+			<p:toolbar>
+				<p:toolbarGroup align="right">
+					<p:commandButton value="Novo prontuário" icon="ui-icon-clipboard"
+						id="botaoNovo" action="/prontuario/CadastroProntuario.xhtml" />
+				</p:toolbarGroup>
+				<p:toolbarGroup>
+					<p:commandButton value="Pesquisa" icon="ui-icon-folder-collapsed"
+						id="botaoPesquisa" action="#{pesquisaProntuarioBean.pesquisar}"
+						update="prontuarioTable" />
+				</p:toolbarGroup>
+			</p:toolbar>
+
+			<p:messages id="messages" autoUpdate="true" closable="true" />
+
+			<div class="ui-fluid">
+				<p:tabView style="margin-top: 10px" id="tabView">
+					<p:tab title="Dados de busca">
+						<p:panelGrid columns="2" layout="grid"
+							columnClasses="ui-grid-col-2, ui-grid-col-4, ui-grid-col-2, ui-grid-col-4"
+							styleClass="panelgrid-noborder">
+
+							<p:outputLabel value="Pacientes" for="paciente" />
+							<p:selectOneMenu id="paciente" filter="true"
+								filterMatchMode="contains"
+								value="#{pesquisaProntuarioBean.prontuario.paciente}">
+								<f:selectItem itemLabel="Selecione o paciente"
+									noSelectionOption="true" />
+								<f:selectItems value="#{pesquisaProntuarioBean.pacientes}"
+									var="pacientes" itemLabel="#{pacientes.nome}"
+									itemValue="#{pacientes}" />
+							</p:selectOneMenu>
+
+							<p:outputLabel value="Médicos" for="medico" />
+							<p:selectOneMenu id="medico" filter="true"
+								filterMatchMode="contains"
+								value="#{pesquisaProntuarioBean.prontuario.medico}">
+								<f:selectItem itemLabel="Selecione o médico"
+									noSelectionOption="true" />
+								<f:selectItems value="#{pesquisaProntuarioBean.medicos}"
+									var="medicos"
+									itemLabel="#{medicos.especialidade.nome}: #{medicos.nome}"
+									itemValue="#{medico}" />
+							</p:selectOneMenu>
+
+						</p:panelGrid>
+					</p:tab>
+				</p:tabView>
+			</div>
+
+			<p:dataTable value="#{pesquisaProntuarioBean.prontuarios}"
+				var="prontuario" id="prontuarioTable"
+				emptyMessage="Nenhum prontuário encontrado." rows="10"
+				style="margin-top: 30px" paginator="true"
+				paginatorAlwaysVisible="true" paginatorPosition="bottom">
+
+				<p:column style="width:16px">
+					<p:rowToggler />
+				</p:column>
+				<p:column headerText="Nome do paciente">
+					<h:outputText value="#{prontuario.paciente.nome}" />
+				</p:column>
+				<p:column headerText="Medicamentos"
+					style="width: 75px; text-align: center">
+					<p:commandButton icon="ui-icon-extlink" title="Medicamentos"
+						action="#{pesquisaProntuarioBean.buscarMedicamentosParaProntuario}"
+						process="@this" oncomplete="PF('mostraMedicamentos').show()"
+						update=":frmPesquisa:mostraMedicamentosDialog">
+						<f:setPropertyActionListener
+							target="#{pesquisaProntuarioBean.prontuarioSelecionado}"
+							value="#{prontuario}" />
+					</p:commandButton>
+				</p:column>
+				<p:column headerText="Exames"
+					style="width: 50px; text-align: center">
+					<p:commandButton icon="ui-icon-extlink" title="Exames"
+						action="#{pesquisaProntuarioBean.buscarExamesParaProntuario}"
+						process="@this" oncomplete="PF('mostraExames').show()"
+						update=":frmPesquisa:mostraExamesDialog">
+						<f:setPropertyActionListener
+							target="#{pesquisaProntuarioBean.prontuarioSelecionado}"
+							value="#{prontuario}" />
+					</p:commandButton>
+				</p:column>
+
+				<p:column headerText="Acão" style="width: 70px; text-align: center">
+					<p:button outcome="CadastroProntuario" icon="ui-icon-pencil"
+						title="Editar">
+						<f:param name="prontuario" value="#{prontuario.codigo}" />
+					</p:button>
+					<p:commandButton icon="ui-icon-trash" title="Excluir"
+						oncomplete="PF('confirmacaoExclusao').show()" process="@this"
+						update=":frmPesquisa:confirmacaoExclusaoDialog">
+						<f:setPropertyActionListener
+							target="#{pesquisaProntuarioBean.prontuarioSelecionado}"
+							value="#{prontuario}" />
+					</p:commandButton>
+				</p:column>
+				<p:rowExpansion>
+					<p:panelGrid columns="4" layout="grid"
+						columnClasses="ui-grid-col-2, ui-grid-col-4, ui-grid-col-2, ui-grid-col-4"
+						styleClass="panelgrid-noborder">
+
+						<h:outputText value="Nome do paciente:" />
+						<h:outputText value="#{prontuario.paciente.nome}" />
+
+						<h:outputText value="Tipo sanguineo:" />
+						<h:outputText value="#{prontuario.tipoSanguineo}" />
+
+						<h:outputText value="Peso:" />
+						<h:outputText value="#{prontuario.peso}" />
+
+						<h:outputText value="Altura:" />
+						<h:outputText value="#{prontuario.altura}" />
+
+						<h:outputText value="Temperatura:" />
+						<h:outputText value="#{prontuario.temperatura}" />
+
+						<h:outputText value="Pressão arterial:" />
+						<h:outputText value="#{prontuario.pressao}" />
+
+						<h:outputText value="Queixa principal?" />
+						<h:outputText value="#{prontuario.queixa}" />
+
+						<h:outputText value="Fuma?" />
+						<h:outputText value="#{prontuario.fumante}" />
+
+						<h:outputText value="Possui diabéticos na família?" />
+						<h:outputText value="#{prontuario.diabetico}" />
+
+						<h:outputText value="Possui lesão?" />
+						<h:outputText value="#{prontuario.lesao}" />
+
+						<h:outputText
+							value="Toma algum medicamento prescrito ou suplementos?" />
+						<h:outputText value="#{prontuario.medicamento}" />
+
+						<h:outputText value="Pratica atividade física?" />
+						<h:outputText value="#{prontuario.atividadeFisica}" />
+
+						<h:outputText value="Possui alergia?" />
+						<h:outputText value="#{prontuario.alergia}" />
+
+						<h:outputText value="Possui algum tipo de doença?" />
+						<h:outputText value="#{prontuario.doenca}" />
+
+						<h:outputText value="Descrição da medicação:" />
+						<h:outputText value="#{prontuario.descricao}" />
+						
+						<h:outputText value="Médico solicitante:" />
+						<h:outputText value="#{prontuario.medico.nome}" />
+						
+						<h:outputText value="Local do exame:" />
+						<h:outputText value="#{prontuario.local.descricao}" />
+						
+						<h:outputText value="Status do exame:" />
+						<h:outputText value="#{prontuario.status.descricao}" />
+						
+						<h:outputText value="Data do exame:" />
+						<h:outputText value="#{prontuario.dataExame}" />
+
+					</p:panelGrid>
+				</p:rowExpansion>
+			</p:dataTable>
+
+			<p:confirmDialog id="confirmacaoExclusaoDialog"
+				widgetVar="confirmacaoExclusao"
+				message="Tem certeza que deseja excluir o prontuário do paciente #{pesquisaProntuarioBean.prontuarioSelecionado.paciente.nome}?"
+				header="Exclusão de prontuário" severity="alert">
+				<p:commandButton value="Não"
+					onclick="PF('confirmacaoExclusao').hide(); return false;" />
+				<p:commandButton value="Sim" update="prontuarioTable"
+					oncomplete="PF('confirmacaoExclusao').hide();"
+					action="#{pesquisaProntuarioBean.excluir}" />
+			</p:confirmDialog>
+
+			<p:dialog id="mostraMedicamentosDialog" header="Medicamentos"
+				widgetVar="mostraMedicamentos" modal="true" responsive="true">
+				<p:dataList
+					value="#{pesquisaProntuarioBean.prontuarioSelecionado.medicamentos}"
+					var="medicamento" itemType="disc"
+					rendered="#{not empty pesquisaProntuarioBean.prontuarioSelecionado.medicamentos}">
+    				#{medicamento.nome}
+    			</p:dataList>
+				<h:outputText value="Nenhum medicamento existente"
+					rendered="#{empty pesquisaProntuarioBean.prontuarioSelecionado.medicamentos}" />
+			</p:dialog>
+			<p:dialog id="mostraExamesDialog" header="Exames"
+				widgetVar="mostraExames" modal="true" responsive="true">
+				<p:dataList
+					value="#{pesquisaProntuarioBean.prontuarioSelecionado.exames}"
+					var="exame" itemType="disc"
+					rendered="#{not empty pesquisaProntuarioBean.prontuarioSelecionado.exames}">
+    				#{exame.nome}
+    			</p:dataList>
+				<h:outputText value="Nenhum exame existente"
+					rendered="#{empty pesquisaProntuarioBean.prontuarioSelecionado.exames}" />
+			</p:dialog>
+
+		</h:form>
+	</ui:define>
+</ui:composition>

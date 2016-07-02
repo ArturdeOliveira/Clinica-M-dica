@@ -1,0 +1,87 @@
+<ui:composition template="/WEB-INF/template/LayoutPadrao.xhtml"
+	xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui" xmlns:o="http://omnifaces.org/ui">
+
+	<ui:define name="corpo">
+		<h1 class="aw-page-title">Agendamento</h1>
+		<f:metadata>
+			<o:viewParam name="agenda" value="#{cadastroAgendaBean.agenda}" />
+		</f:metadata>
+
+		<h:form>
+			<p:toolbar>
+				<p:toolbarGroup>
+					<p:commandButton value="Salvar" title="salvar" icon="ui-icon-disk"
+						id="botaoSalvar" action="#{cadastroAgendaBean.salvar}" />
+				</p:toolbarGroup>
+				<p:toolbarGroup align="right">
+					<p:button value="Pesquisa" title="pesquisar"
+						icon="ui-icon-folder-collapsed"
+						outcome="/agenda/PesquisaAgenda.xhtml" />
+				</p:toolbarGroup>
+			</p:toolbar>
+
+			<p:messages id="messages" autoUpdate="true" closable="true" />
+
+			<div class="ui-fluid">
+				<p:tabView style="margin-top: 10px" id="tabView">
+					<p:tab title="Dados básicos">
+						<p:panelGrid columns="2" layout="grid"
+							columnClasses="ui-grid-col-2, ui-grid-col-4, ui-grid-col-2, ui-grid-col-4"
+							styleClass="panelgrid-noborder">
+
+							<p:outputLabel value="Paciente" for="paciente" />
+							<p:selectOneMenu id="paciente" effect="fold" filter="true"
+								filterMatchMode="contains"
+								value="#{cadastroAgendaBean.agenda.paciente}">
+								<f:selectItem itemLabel="Selecione o paciente" />
+								<f:selectItems value="#{cadastroAgendaBean.pacientes}"
+									var="paciente" itemLabel="#{paciente.nome}"
+									itemValue="#{paciente}" />
+							</p:selectOneMenu>
+
+							<p:outputLabel value="Data da consulta" for="dataConsulta" />
+							<p:inputText id="dataConsulta" readonly="true"
+								value="#{cadastroAgendaBean.agenda.dataConsulta}">
+								<f:convertDateTime pattern="dd/MM/yyyy"/>
+							</p:inputText>
+
+							<p:outputLabel value="Inicio" for="inicio" />
+							<p:inputMask id="inicio" readonly="true"
+								value="#{cadastroAgendaBean.agenda.inicio}" mask="99:99" />
+
+							<p:outputLabel value="Fim" for="fim" />
+							<p:inputMask id="fim" readonly="true"
+								value="#{cadastroAgendaBean.agenda.fim}" mask="99:99" />
+
+							<p:outputLabel value="Tipo Consulta" for="tipo" />
+							<p:selectOneMenu required="true"
+								requiredMessage="O campo tipo consulta é obrigatório !"
+								id="tipo" value="#{cadastroAgendaBean.agenda.tipoConsulta}">
+								<f:selectItem itemLabel="Selecione o tipo da consulta" />
+								<f:selectItems value="#{cadastroAgendaBean.tipoConsultas}"
+									var="tipo" itemLabel="#{tipo.descricao}" itemValue="#{tipo}" />
+							</p:selectOneMenu>
+						</p:panelGrid>
+					</p:tab>
+				</p:tabView>
+			</div>
+		</h:form>
+	</ui:define>
+</ui:composition>
+
+<!-- 
+							<p:outputLabel value="Médico" for="medico" />
+							<p:selectOneMenu id="medico" effect="fold" filter="true"
+								filterMatchMode="contains"
+								value="#{cadastroAgendaBean.agenda.medico}">
+								<f:selectItem itemLabel="Selecione o médico" />
+								<f:selectItems value="#{cadastroAgendaBean.medicos}"
+									var="medico"
+									itemLabel="#{medico.nome}:#{medico.especialidade.nome}"
+									itemValue="#{medico}" />
+							</p:selectOneMenu>
+ -->

@@ -1,0 +1,19 @@
+<ui:composition template="/WEB-INF/template/LayoutPadrao.xhtml"
+	xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+
+	<ui:define name="corpo">
+		<h1 class="aw-page-title"></h1>
+		<h:form id="frm">
+			<p:fieldset legend="Acesso negado" style="margin-bottom:20px">
+				<h:panelGrid columns="2" cellpadding="5">
+					<p>Você não possui permissão para acessar esta página.</p>
+				</h:panelGrid>
+			</p:fieldset>
+		</h:form>
+	</ui:define>
+
+</ui:composition>

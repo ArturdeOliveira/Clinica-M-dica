@@ -1,0 +1,46 @@
+<ui:composition template="/WEB-INF/template/LayoutLogin.xhtml"
+	xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui">
+
+	<ui:define name="corpo">
+		<h1 class="aw-page-title"></h1>
+		<f:metadata>
+			<f:viewParam name="dummy" />
+			<f:event listener="#{loginBean.preRender}" type="preRenderView" />
+		</f:metadata>
+
+		<div id="login-dialog">
+			<h:form id="frm" prependId="false">
+				<p:fieldset styleClass="fieldset" legend="Login">
+
+					<p:messages closable="true" id="messages" />
+
+					<p:panelGrid columns="2" layout="grid"
+						columnClasses="ui-grid-col-2, ui-grid-col-4, ui-grid-col-2, ui-grid-col-4"
+						styleClass="panelgrid-noborder">
+
+						<h:outputLabel value="Email:" />
+						<p:inputText id="j_username" value="#{loginBean.email}"
+							required="true" size="30" title="digite o email!">
+							<p:tooltip showEvent="focus" hideEvent="blur" />
+						</p:inputText>
+
+						<h:outputLabel value="Senha:" />
+						<p:password id="j_password" required="true" size="30"
+							title="digite a senha!">
+							<p:tooltip showEvent="focus" hideEvent="blur" />
+						</p:password>
+
+
+						<p:commandButton icon="ui-icon-power" value="Entrar"
+							action="#{loginBean.login}" update="messages" ajax="false" />
+
+					</p:panelGrid>
+				</p:fieldset>
+			</h:form>
+		</div>
+	</ui:define>
+</ui:composition>

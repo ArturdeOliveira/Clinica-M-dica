@@ -1,0 +1,254 @@
+<ui:composition template="/WEB-INF/template/LayoutPadrao.xhtml"
+	xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui" xmlns:o="http://omnifaces.org/ui">
+
+	<ui:define name="corpo">
+		<h1 class="aw-page-title">Cadastro de prontuário</h1>
+		<f:metadata>
+			<o:viewParam name="prontuario"
+				value="#{cadastroProntuarioBean.prontuario}" />
+		</f:metadata>
+
+		<h:form>
+			<p:toolbar>
+				<p:toolbarGroup>
+					<p:commandButton value="Salvar" icon="ui-icon-disk"
+						actionListener="#{cadastroProntuarioBean.salvar}" update="@form"
+						id="botaoSalvar" />
+				</p:toolbarGroup>
+				<p:toolbarGroup align="right">
+					<p:button value="Pesquisa" icon="ui-icon-folder-collapsed"
+						outcome="/prontuario/PesquisaProntuarios.xhtml" />
+				</p:toolbarGroup>
+			</p:toolbar>
+
+			<p:messages id="messages" autoUpdate="true" closable="true" />
+
+			<div class="ui-fluid">
+				<p:tabView style="margin-top: 10px" id="tabView">
+					<p:tab title="Dados básicos">
+						<p:panelGrid columns="2" layout="grid"
+							columnClasses="ui-grid-col-2, ui-grid-col-4, ui-grid-col-2, ui-grid-col-4"
+							styleClass="panelgrid-noborder">
+
+							<p:outputLabel value="Paciente" for="paciente" />
+							<p:selectOneMenu required="true"
+								requiredMessage="Paciente é obrigatório !" id="paciente"
+								filter="true" filterMatchMode="contains"
+								value="#{cadastroProntuarioBean.prontuario.paciente}">
+								<f:selectItem itemLabel="Selecione o paciente" />
+								<f:selectItems value="#{cadastroProntuarioBean.pacientes}"
+									var="paciente" itemLabel="#{paciente.nome}"
+									itemValue="#{paciente}" />
+							</p:selectOneMenu>
+
+							<p:outputLabel for="tipoSanguineo" value="Tipo sanguineo?" />
+							<p:selectOneMenu id="tipoSanguineo" required="true"
+								requiredMessage="Campo tipo sanguineo é obrigatório !"
+								value="#{cadastroProntuarioBean.prontuario.tipoSanguineo}"
+								layout="grid" columns="2">
+								<f:selectItem itemLabel="Selecione a opção" />
+								<f:selectItem itemLabel="O+" itemValue="O+" />
+								<f:selectItem itemLabel="O-" itemValue="O-" />
+								<f:selectItem itemLabel="A+" itemValue="A+" />
+								<f:selectItem itemLabel="A-" itemValue="A-" />
+								<f:selectItem itemLabel="B+" itemValue="B+" />
+								<f:selectItem itemLabel="B-" itemValue="B-" />
+								<f:selectItem itemLabel="AB+" itemValue="AB+" />
+								<f:selectItem itemLabel="AB-" itemValue="AB-" />
+							</p:selectOneMenu>
+
+							<p:outputLabel value="Peso" for="peso" />
+							<p:inputText id="peso" required="true"
+								requiredMessage="Peso é obrigatário !"
+								value="#{cadastroProntuarioBean.prontuario.peso}">
+							</p:inputText>
+
+							<p:outputLabel value="Altura" for="altura" />
+							<p:inputMask id="altura" required="true"
+								requiredMessage="Altura é obrigatório !"
+								value="#{cadastroProntuarioBean.prontuario.altura}" mask="9.99">
+							</p:inputMask>
+
+							<p:outputLabel value="Temperatura" for="temperatura" />
+							<p:inputMask id="temperatura" required="true"
+								requiredMessage="Temperatura é obrigatório !"
+								value="#{cadastroProntuarioBean.prontuario.temperatura}"
+								mask="99">
+							</p:inputMask>
+
+							<p:outputLabel value="Pressão" for="pressao" />
+							<p:inputMask id="pressao" required="true"
+								requiredMessage="Pressão é obrigatório !"
+								value="#{cadastroProntuarioBean.prontuario.pressao}" mask="99.9">
+							</p:inputMask>
+
+							<p:outputLabel value="Frequência cardíaca"
+								for="frequencia_cardiaca" />
+							<p:inputText id="frequencia_cardiaca" required="true"
+								requiredMessage="Frequência cardíaca é obrigatório !"
+								value="#{cadastroProntuarioBean.prontuario.frequencia_cardiaca}">
+							</p:inputText>
+
+						</p:panelGrid>
+					</p:tab>
+
+					<p:tab title="Anamnese">
+						<p:panelGrid columns="4" layout="grid"
+							columnClasses="ui-grid-col-2, ui-grid-col-4, ui-grid-col-2, ui-grid-col-4"
+							styleClass="panelgrid-noborder">
+
+							<p:outputLabel for="fumante" value="Fumante ?" />
+							<p:selectOneMenu id="fumante" required="true"
+								requiredMessage="Fumante é obrigatório !"
+								value="#{cadastroProntuarioBean.prontuario.fumante}"
+								layout="grid" columns="2">
+								<f:selectItem itemLabel="Selecione a opção" />
+								<f:selectItem itemLabel="Sim" itemValue="sim" />
+								<f:selectItem itemLabel="Não" itemValue="não" />
+							</p:selectOneMenu>
+
+							<p:outputLabel value="Queixa principal?" for="queixa" />
+							<p:inputTextarea rows="3" cols="100" id="queixa" required="true"
+								requiredMessage="Queixa é obrigatório !"
+								value="#{cadastroProntuarioBean.prontuario.queixa}" />
+
+							<p:outputLabel for="diabetico"
+								value="Possui diabéticos na família?" />
+							<p:selectOneMenu id="diabetico" required="true"
+								requiredMessage="Campo diabético é obrigatório !"
+								value="#{cadastroProntuarioBean.prontuario.diabetico}"
+								layout="grid" columns="2">
+								<f:selectItem itemLabel="Selecione a opção" />
+								<f:selectItem itemLabel="Sim" itemValue="sim" />
+								<f:selectItem itemLabel="Não" itemValue="não" />
+								<f:selectItem itemLabel="Não sabe" itemValue="naosabe" />
+							</p:selectOneMenu>
+
+							<p:outputLabel value="Possui problemas cardíaco conhecido?"
+								for="cardiaco" />
+							<p:inputTextarea rows="3" cols="100" id="cardiaco"
+								required="true" requiredMessage="Campo cardiaco é obrigatório !"
+								value="#{cadastroProntuarioBean.prontuario.cardiaco}" />
+
+							<p:outputLabel for="atividadeFisica"
+								value="Pratica atividade física?" />
+							<p:selectOneMenu id="atividadeFisica" required="true"
+								requiredMessage="Campo atividade física é obrigatório !"
+								value="#{cadastroProntuarioBean.prontuario.atividadeFisica}"
+								layout="grid" columns="2">
+								<f:selectItem itemLabel="Selecione a opção" />
+								<f:selectItem itemLabel="Sim" itemValue="sim" />
+								<f:selectItem itemLabel="Não" itemValue="não" />
+							</p:selectOneMenu>
+
+							<p:outputLabel
+								value="Você tem quaisquer lesões ou problemas ortopédicos?"
+								for="lesao" />
+							<p:inputTextarea rows="3" cols="100" id="lesao" required="true"
+								requiredMessage="Campo lesao é obrigatório !"
+								value="#{cadastroProntuarioBean.prontuario.lesao}" />
+
+							<p:outputLabel
+								value="Toma algum medicamento prescrito ou suplementos?"
+								for="medicamento" />
+							<p:inputTextarea rows="3" cols="100" id="medicamento"
+								required="true"
+								requiredMessage="Campo medicamento é obrigatório !"
+								value="#{cadastroProntuarioBean.prontuario.medicamento}" />
+
+							<p:outputLabel value="Possui algum tipo de alergia?"
+								for="alergia" />
+							<p:inputTextarea rows="3" cols="100" id="alergia" required="true"
+								requiredMessage="Campo alergia é obrigatório !"
+								value="#{cadastroProntuarioBean.prontuario.alergia}" />
+
+							<p:outputLabel value="Possui algum tipo de doença?" for="doenca" />
+							<p:inputTextarea rows="3" cols="100" id="doenca" required="true"
+								requiredMessage="Campo doença é obrigatório !"
+								value="#{cadastroProntuarioBean.prontuario.doenca}" />
+
+						</p:panelGrid>
+					</p:tab>
+
+					<p:tab title="Medicamentos">
+						<p:panelGrid columns="2" layout="grid"
+							columnClasses="ui-grid-col-2, ui-grid-col-4, ui-grid-col-2, ui-grid-col-4"
+							styleClass="panelgrid-noborder">
+
+							<p:outputLabel value="Medicamentos" for="medicamentos" />
+							<p:selectManyMenu id="medicamentos" styleClass="many-menu"
+								value="#{cadastroProntuarioBean.prontuario.medicamentos}"
+								converter="medicamentoConverter" filterMatchMode="contains"
+								showCheckbox="true" filter="true">
+								<f:attribute name="collectionType" value="java.util.ArrayList" />
+								<f:selectItems value="#{cadastroProntuarioBean.medicamentos}"
+									var="medicamento" itemLabel="#{medicamento.nome}"
+									itemValue="#{medicamento}" />
+							</p:selectManyMenu>
+
+							<p:outputLabel value="Descricão?" for="descricao" />
+							<p:inputTextarea rows="3" cols="100" id="descricao"
+								value="#{cadastroProntuarioBean.prontuario.descricao}" />
+
+						</p:panelGrid>
+					</p:tab>
+					<p:tab title="Exames">
+						<p:panelGrid columns="2" layout="grid"
+							columnClasses="ui-grid-col-2, ui-grid-col-4, ui-grid-col-2, ui-grid-col-4"
+							styleClass="panelgrid-noborder">
+
+							<p:outputLabel value="Médico" for="medico" />
+							<p:selectOneMenu id="medico" filter="true"
+								filterMatchMode="contains"
+								value="#{cadastroProntuarioBean.prontuario.medico}">
+								<f:selectItem itemLabel="Selecione o médico" />
+								<f:selectItems value="#{cadastroProntuarioBean.medicos}"
+									var="medico"
+									itemLabel="#{medico.nome}:#{medico.especialidade.nome}"
+									itemValue="#{medico}" />
+							</p:selectOneMenu>
+
+							<p:outputLabel value="Exames" for="exames" />
+							<p:selectManyMenu id="exames" styleClass="many-menu"
+								value="#{cadastroProntuarioBean.prontuario.exames}"
+								converter="exameConverter" filterMatchMode="contains"
+								showCheckbox="true" filter="true">
+								<f:attribute name="collectionType" value="java.util.ArrayList" />
+								<f:selectItems value="#{cadastroProntuarioBean.exames}"
+									var="exame" itemLabel="#{exame.nome}" itemValue="#{exame}" />
+							</p:selectManyMenu>
+
+							<p:outputLabel value="Local:" for="local" />
+							<p:selectOneMenu id="local"
+								value="#{cadastroProntuarioBean.prontuario.local}">
+								<f:selectItem itemLabel="Selecione o local da consulta" />
+								<f:selectItems value="#{cadastroProntuarioBean.locais}"
+									var="local" itemLabel="#{local.descricao}" itemValue="#{local}" />
+							</p:selectOneMenu>
+
+							<p:outputLabel value="Status:" for="status" />
+							<p:selectOneMenu id="status"
+								value="#{cadastroProntuarioBean.prontuario.status}">
+								<f:selectItem itemLabel="Selecione o status da consulta" />
+								<f:selectItems value="#{cadastroProntuarioBean.status}"
+									var="status" itemLabel="#{status.descricao}"
+									itemValue="#{status}" />
+							</p:selectOneMenu>
+							
+							<p:outputLabel value="Data do exame:" for="dataExame" />
+							<p:calendar id="dataExame"
+								value="#{cadastroProntuarioBean.prontuario.dataExame}"
+								pattern="dd/MM/yyyy" mask="99/99/9999">
+							</p:calendar>
+
+						</p:panelGrid>
+					</p:tab>
+				</p:tabView>
+			</div>
+		</h:form>
+	</ui:define>
+</ui:composition>

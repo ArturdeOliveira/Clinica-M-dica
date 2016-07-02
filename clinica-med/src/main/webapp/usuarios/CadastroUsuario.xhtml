@@ -1,0 +1,113 @@
+<ui:composition template="/WEB-INF/template/LayoutPadrao.xhtml"
+	xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui" xmlns:o="http://omnifaces.org/ui">
+
+	<ui:define name="corpo">
+		<h1 class="aw-page-title">Cadastro de usuários</h1>
+		<h:form id="usuarioForm">
+
+			<f:metadata>
+				<o:viewParam name="usuario" value="#{cadastroUsuarioBean.usuario}" />
+				<f:event listener="#{cadastroUsuarioBean.inicializar}"
+					type="preRenderView" />
+			</f:metadata>
+
+			<p:toolbar>
+				<p:toolbarGroup>
+					<p:button value="Novo" outcome="/usuarios/CadastroUsuario"
+						icon="ui-icon-document" />
+					<p:commandButton value="Salvar" id="botaoSalvar"
+						icon="ui-icon-disk" action="#{cadastroUsuarioBean.salvar}"
+						update="@form" />
+				</p:toolbarGroup>
+				<p:toolbarGroup align="right">
+					<p:button value="Pesquisa" icon="ui-icon-folder-collapsed"
+						outcome="/usuarios/PesquisaUsuarios" />
+				</p:toolbarGroup>
+			</p:toolbar>
+			
+			<p:messages autoUpdate="true" closable="true" />
+
+			<div class="ui-fluid">
+				<p:tabView style="margin-top: 10px" id="tabView">
+					<p:tab title="Dados básicos">
+						<p:panelGrid columns="2" layout="grid"
+							columnClasses="ui-grid-col-2, ui-grid-col-4, ui-grid-col-2, ui-grid-col-4"
+							styleClass="panelgrid-noborder">
+
+							<p:outputLabel value="Nome" for="nome" />
+							<p:inputText id="nome" required="true"
+								requiredMessage="Nome é obrigatório!"
+								value="#{cadastroUsuarioBean.usuario.nome}" />
+
+							<p:outputLabel value="E-mail" for="email" />
+							<p:inputText id="email" required="true"
+								requiredMessage="Email é obrigatório!"
+								value="#{cadastroUsuarioBean.usuario.email}" />
+
+							<p:outputLabel value="Senha" for="senha" />
+							<p:password id="senha" match="repetirsenha" feedback="true"
+								required="true" requiredMessage="Senha é obrigatório!"
+								promptLabel="Digite sua senha" weakLabel="Senha fraco"
+								goodLabel="Senha boa" strongLabel="Senha forte" size="80" />
+							<p:outputLabel value="Repetir Senha" for="repetirsenha" />
+							<p:password id="repetirsenha" required="true"
+								requiredMessage="Repetir senha é obrigatório!"
+								value="#{cadastroUsuarioBean.usuario.senha}" />
+
+						</p:panelGrid>
+					</p:tab>
+				</p:tabView>
+			</div>
+
+			<p:panelGrid columns="2" style="margin-top:20px;">
+				<p:selectOneMenu id="grupoCombo" style="margin-top: 4px;"
+					value="#{cadastroUsuarioBean.grupoAdicionado}">
+					<f:selectItem itemLabel="Selecione o Grupo"
+						noSelectionOption="true" />
+					<f:selectItems value="#{cadastroUsuarioBean.gruposTela}"
+						var="grupo" itemLabel="#{grupo.nome}" itemValue="#{grupo}" />
+				</p:selectOneMenu>
+
+				<p:commandButton value="Adicionar grupo" id="adicionarGrupo"
+					icon="ui-icon-plus" process="@this grupoCombo"
+					update=":usuarioForm:gruposTable"
+					action="#{cadastroUsuarioBean.adicionarGrupo}" />
+			</p:panelGrid>
+
+			<p:dataTable id="gruposTable"
+				value="#{cadastroUsuarioBean.usuario.grupos}" var="grupos"
+				style="margin-top: 20px;" emptyMessage="Nenhum grupo adicionado"
+				rows="20" paginator="true" paginatorAlwaysVisible="false"
+				paginatorPosition="bottom">
+
+				<p:column headerText="Grupo">
+					<h:outputText value="#{grupos.nome}" />
+				</p:column>
+
+				<p:column style="text-align: center;width: 50px;">
+					<p:commandButton title="Excluir" icon="ui-icon-trash"
+						oncomplete="PF('confirmaExclusaoGrupo').show();" process="@this">
+						<f:setPropertyActionListener value="#{grupos}"
+							target="#{cadastroUsuarioBean.grupoAdicionado}"></f:setPropertyActionListener>
+					</p:commandButton>
+				</p:column>
+
+			</p:dataTable>
+
+			<!-- Dialog para exclusao -->
+			<p:confirmDialog header="Exclusão de grupo"
+				message="Tem certeza que deseja excluir o grupo?"
+				widgetVar="confirmaExclusaoGrupo">
+				<p:commandButton icon="ui-icon-check" value="Sim"
+					oncomplete="PF('confirmaExclusaoGrupo').hide();" process="@this"
+					update="gruposTable" action="#{cadastroUsuarioBean.excluirGrupo}" />
+				<p:button value="Não"
+					onclick="PF('confirmaExclusaoGrupo').hide(); return false;" />
+			</p:confirmDialog>
+		</h:form>
+	</ui:define>
+</ui:composition>

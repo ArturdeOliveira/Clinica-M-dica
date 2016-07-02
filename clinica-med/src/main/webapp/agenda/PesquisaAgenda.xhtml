@@ -1,0 +1,144 @@
+<ui:composition template="/WEB-INF/template/LayoutPadrao.xhtml"
+	xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui" xmlns:o="http://omnifaces.org/ui">
+
+	<ui:define name="corpo">
+		<h1 class="aw-page-title">Agendamento</h1>
+		<f:metadata>
+			<o:viewParam name="agenda" value="#{cadastroAgendaBean.agenda}" />
+		</f:metadata>
+
+		<h:form id="frmFiltro">
+			<p:toolbar>
+				<!-- 				<p:toolbarGroup align="right">
+					<p:commandButton value="Novo" icon="ui-icon-document"
+						id="botaoNovo" action="/agenda/CadastroAgenda.xhtml" />
+				</p:toolbarGroup>
+ -->
+				<p:toolbarGroup>
+					<p:commandButton value="Pesquisa" icon="ui-icon-folder-collapsed"
+						id="botaoPesquisa" action="#{pesquisaAgendaBean.pesquisar}"
+						update="agendasTable" />
+				</p:toolbarGroup>
+			</p:toolbar>
+
+			<p:messages id="messages" autoUpdate="true" closable="true" />
+			<div class="ui-fluid">
+				<p:tabView style="margin-top: 10px" id="tabView">
+					<p:tab title="Dados de busca">
+						<p:panelGrid columns="2" layout="grid"
+							columnClasses="ui-grid-col-2, ui-grid-col-4, ui-grid-col-2, ui-grid-col-4"
+							styleClass="panelgrid-noborder">
+							<p:outputLabel value="Data da consulta" for="dataConsulta" />
+							<p:calendar id="dataConsulta"
+								value="#{pesquisaAgendaBean.agenda.dataConsulta}"
+								pattern="dd/MM/yyyy" />
+
+							<p:outputLabel value="Médicos" for="medico" />
+							<p:selectOneMenu id="medico" filter="true"
+								filterMatchMode="contains"
+								value="#{pesquisaAgendaBean.agenda.medico}">
+								<f:selectItem itemLabel="Selecione o médico"
+									noSelectionOption="true" />
+								<f:selectItems value="#{pesquisaAgendaBean.medicos}"
+									var="medicos"
+									itemLabel="#{medicos.especialidade.nome}: #{medicos.nome}"
+									itemValue="#{medico}" />
+							</p:selectOneMenu>
+
+							<p:outputLabel value="Pacientes" for="paciente" />
+							<p:selectOneMenu id="paciente" filter="true"
+								filterMatchMode="contains"
+								value="#{pesquisaAgendaBean.agenda.paciente}">
+								<f:selectItem itemLabel="Selecione o paciente"
+									noSelectionOption="true" />
+								<f:selectItems value="#{pesquisaAgendaBean.pacientes}"
+									var="pacientes" itemLabel="#{pacientes.nome}"
+									itemValue="#{pacientes}" />
+							</p:selectOneMenu>
+
+						</p:panelGrid>
+					</p:tab>
+				</p:tabView>
+			</div>
+
+			<p:dataTable id="agendasTable" value="#{pesquisaAgendaBean.agendas}"
+				var="agenda" emptyMessage="Nenhum agendamento encontrado." rows="5"
+				paginator="true" paginatorAlwaysVisible="true"
+				style="margin-top: 30px" paginatorPosition="bottom">
+
+				<p:column style="width:16px">
+					<p:rowToggler />
+				</p:column>
+				<p:column headerText="Paciente">
+					<h:outputText value="#{agenda.paciente.nome}" />
+				</p:column>
+				<p:column headerText="Médico">
+					<h:outputText value="#{agenda.medico.nome}" />
+				</p:column>
+				<p:column headerText="Data da Consulta">
+					<h:outputText value="#{agenda.dataConsulta}">
+						<f:convertDateTime pattern="dd/MM/yyyy " />
+					</h:outputText>
+				</p:column>
+
+				<p:column headerText="Ação" style="width: 50px; text-align: center">
+					<p:button outcome="CadastroAgenda" icon="ui-icon-pencil"
+						title="Editar">
+						<f:param name="agenda" value="#{agenda.codigo}" />
+					</p:button>
+					<!-- 					   			
+		   			<p:commandButton icon="ui-icon-trash" title="Excluir" oncomplete="PF('confirmacaoExclusao').show();"
+							process="@this" update=":frmFiltro:confirmacaoExclusaoDialog">
+						<f:setPropertyActionListener target="#{pesquisaAgendaBean.agendaSelecionado}" value="#{agenda}" />
+					</p:commandButton>
+		 -->
+				</p:column>
+				<p:rowExpansion>
+					<p:panelGrid columns="4" layout="grid"
+						columnClasses="ui-grid-col-2, ui-grid-col-4, ui-grid-col-2, ui-grid-col-4"
+						styleClass="panelgrid-noborder">
+
+						<h:outputText value="Nome paciente:" />
+						<h:outputText value="#{agenda.paciente.nome}" />
+
+						<h:outputText value="Nome do médico:" />
+						<h:outputText value="#{agenda.medico.nome}" />
+
+						<h:outputText value="Especialidade:" />
+						<h:outputText value="#{agenda.medico.especialidade.nome}" />
+
+						<h:outputText value="Data da consulta:" />
+						<h:outputText value="#{agenda.dataConsulta}">
+							<f:convertDateTime pattern="dd/MM/yyyy " />
+						</h:outputText>
+
+						<h:outputText value="Início da consulta:" />
+						<h:outputText value="#{agenda.inicio}" />
+
+						<h:outputText value="Fim da consulta:" />
+						<h:outputText value="#{agenda.fim}" />
+
+						<h:outputText value="Status da consulta:" />
+						<h:outputText value="#{agenda.tipoConsulta.descricao}" />
+
+					</p:panelGrid>
+				</p:rowExpansion>
+			</p:dataTable>
+
+			<p:confirmDialog id="confirmacaoExclusaoDialog"
+				widgetVar="confirmacaoExclusao"
+				message="Tem certeza que deseja excluir o agendamento ?"
+				header="Exclusão de Agenda" severity="alert">
+				<p:commandButton value="Não"
+					onclick="PF('confirmacaoExclusao').hide(); return false;" />
+				<p:commandButton value="Sim" update=":frmFiltro:agendasTable"
+					oncomplete="PF('confirmacaoExclusao').hide();"
+					action="#{pesquisaAgendaBean.excluir}" />
+			</p:confirmDialog>
+		</h:form>
+	</ui:define>
+</ui:composition>

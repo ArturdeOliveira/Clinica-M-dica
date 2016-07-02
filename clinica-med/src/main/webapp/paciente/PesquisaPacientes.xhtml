@@ -1,0 +1,138 @@
+<ui:composition template="/WEB-INF/template/LayoutPadrao.xhtml"
+	xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui" xmlns:o="http://omnifaces.org/ui">
+
+	<ui:define name="corpo">
+		<h1 class="aw-page-title">Pacientes</h1>
+		<f:metadata>
+			<o:viewParam name="paciente" value="#{cadastroPacienteBean.paciente}" />
+		</f:metadata>
+
+		<h:form id="frmPesquisa">
+			<p:toolbar>
+				<p:toolbarGroup align="right">
+					<p:commandButton value="Novo paciente" icon="ui-icon-person"
+						id="botaoNovo" action="/paciente/CadastroPaciente.xhtml" />
+				</p:toolbarGroup>
+				<p:toolbarGroup>
+					<p:commandButton value="Pesquisa" icon="ui-icon-folder-collapsed"
+						id="botaoPesquisa" action="#{pesquisaPacienteBean.pesquisar}"
+						update="pacientesTable" />
+				</p:toolbarGroup>
+			</p:toolbar>
+
+			<p:messages id="messages" autoUpdate="true" closable="true" />
+
+			<div class="ui-fluid">
+				<p:tabView style="margin-top: 10px" id="tabView">
+					<p:tab title="Dados de busca">
+						<p:panelGrid columns="2" layout="grid"
+							columnClasses="ui-grid-col-2, ui-grid-col-4, ui-grid-col-2, ui-grid-col-4"
+							styleClass="panelgrid-noborder">
+
+							<p:outputLabel value="Nome" for="nome" />
+							<p:inputText id="nome" size="100"
+								value="#{pesquisaPacienteBean.nome}" />
+
+						</p:panelGrid>
+					</p:tab>
+				</p:tabView>
+			</div>
+
+			<p:dataTable value="#{pesquisaPacienteBean.pacientesFiltrados}"
+				var="paciente" id="pacientesTable"
+				emptyMessage="Nenhum paciente encontrado." rows="10"
+				style="margin-top: 30px" paginator="true"
+				paginatorAlwaysVisible="true" paginatorPosition="bottom">
+
+				<p:column style="width:16px">
+					<p:rowToggler />
+				</p:column>
+				<p:column headerText="Nome">
+					<h:outputText value="#{paciente.nome}" />
+				</p:column>
+				<p:column headerText="CNS">
+					<h:outputText value="#{paciente.cns}" />
+				</p:column>
+				<p:column headerText="Foto" style="width: 50px; text-align: center">
+					<p:commandButton icon="ui-icon-extlink" title="Imagem"
+						process="@this" oncomplete="PF('mostraImagem').show()"
+						update=":frmPesquisa:mostraImagemDialog">
+						<f:setPropertyActionListener
+							target="#{fotoPacienteBean.pacienteSelecionado}" value="#{paciente}" />
+					</p:commandButton>
+				</p:column>
+				<p:column headerText="Acão" style="width: 100px; text-align: center">
+					<p:button outcome="CadastroPaciente" icon="ui-icon-pencil"
+						title="Editar">
+						<f:param name="paciente" value="#{paciente.codigo}" />
+					</p:button>
+					<p:commandButton icon="ui-icon-trash" title="Excluir"
+						oncomplete="PF('confirmacaoExclusao').show();" process="@this"
+						update=":frmPesquisa:confirmacaoExclusaoDialog">
+						<f:setPropertyActionListener
+							target="#{pesquisaPacienteBean.pacienteSelecionado}"
+							value="#{paciente}" />
+					</p:commandButton>
+				</p:column>
+
+				<p:rowExpansion>
+					<p:panelGrid columns="4" layout="grid"
+						columnClasses="ui-grid-col-2, ui-grid-col-4, ui-grid-col-2, ui-grid-col-4"
+						styleClass="panelgrid-noborder">
+
+						<h:outputText value="Nome:" />
+						<h:outputText value="#{paciente.nome}" />
+
+						<h:outputText value="Data de nascimento:" />
+						<h:outputText value="#{paciente.dataNascimento}" />
+
+						<h:outputText value="Endereço:" />
+						<h:outputText value="#{paciente.endereco}" />
+
+						<h:outputText value="Cidade:" />
+						<h:outputText value="#{paciente.cidade}" />
+
+						<h:outputText value="Estado:" />
+						<h:outputText value="#{paciente.estado.descricao}" />
+
+						<h:outputText value="Celular:" />
+						<h:outputText value="#{paciente.celular}" />
+
+						<h:outputText value="Cpf:" />
+						<h:outputText value="#{paciente.cpf}" />
+
+						<h:outputText value="Sexo:" />
+						<h:outputText value="#{paciente.sexo.descricao}" />
+
+						<h:outputText value="Cns:" />
+						<h:outputText value="#{paciente.cns}" />
+
+					</p:panelGrid>
+				</p:rowExpansion>
+
+			</p:dataTable>
+
+			<p:confirmDialog id="confirmacaoExclusaoDialog"
+				widgetVar="confirmacaoExclusao"
+				message="Tem certeza que deseja excluir o paciente #{pesquisaPacienteBean.pacienteSelecionado.nome}?"
+				header="Exclusão de paciente" severity="alert">
+				<p:commandButton value="Não"
+					onclick="PF('confirmacaoExclusao').hide(); return false;" />
+				<p:commandButton value="Sim" update=":frmPesquisa:pacientesTable"
+					oncomplete="PF('confirmacaoExclusao').hide();"
+					action="#{pesquisaPacienteBean.excluir}" />
+			</p:confirmDialog>
+			
+			<p:dialog responsive="true" id="mostraImagemDialog" widgetVar="mostraImagem"
+				modal="true" closeOnEscape="true">
+				<h:outputText value="Nenhuma imagem cadastrada"
+					rendered="#{fotoPacienteBean.foto == null}" />
+				<p:graphicImage value="#{fotoPacienteBean.foto}" cache="false" />
+			</p:dialog>
+		</h:form>
+	</ui:define>
+</ui:composition>

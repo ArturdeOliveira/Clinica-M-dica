@@ -1,0 +1,122 @@
+<ui:composition template="/WEB-INF/template/LayoutPadrao.xhtml"
+	xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui" xmlns:o="http://omnifaces.org/ui">
+
+
+	<ui:define name="corpo">
+		<h1 class="aw-page-title">Funcionários</h1>
+		<h:form id="frmPesquisa">
+			<p:toolbar>
+				<p:toolbarGroup align="right">
+					<p:commandButton value="Novo funcionário" icon="ui-icon-person"
+						id="botaoNovo" action="/funcionario/CadastroFuncionario.xhtml" />
+				</p:toolbarGroup>
+				<p:toolbarGroup>
+					<p:commandButton value="Pesquisa" icon="ui-icon-folder-collapsed"
+						id="botaoPesquisa" action="#{pesquisaFuncionarioBean.pesquisar}"
+						update="funcionariosTable" />
+				</p:toolbarGroup>
+			</p:toolbar>
+			<p:messages id="messages" autoUpdate="true" closable="true" />
+
+			<div class="ui-fluid">
+				<p:tabView style="margin-top: 10px" id="tabView">
+					<p:tab title="Dados de busca">
+						<p:panelGrid columns="2" layout="grid"
+							columnClasses="ui-grid-col-2, ui-grid-col-4, ui-grid-col-2, ui-grid-col-4"
+							styleClass="panelgrid-noborder">
+
+							<p:outputLabel value="Nome" for="nome" />
+							<p:inputText id="nome" size="100"
+								value="#{pesquisaFuncionarioBean.nome}" />
+
+						</p:panelGrid>
+					</p:tab>
+				</p:tabView>
+			</div>
+
+			<p:dataTable id="funcionariosTable"
+				value="#{pesquisaFuncionarioBean.funcionariosFiltrados}"
+				var="funcionario" emptyMessage="Nenhum funcionário encontrado."
+				rows="10" style="margin-top: 30px" paginator="true"
+				paginatorAlwaysVisible="true" paginatorPosition="bottom">
+
+				<p:column style="width:16px">
+					<p:rowToggler />
+				</p:column>
+
+				<p:column headerText="Nome" sortBy="#{funcionario.nome}">
+					<h:outputText value="#{funcionario.nome}" />
+				</p:column>
+				<p:column headerText="Matrícula">
+					<h:outputText value="#{funcionario.matricula}" />
+				</p:column>
+
+				<p:column headerText="Acão" style="width: 100px; text-align: center">
+					<p:button outcome="CadastroFuncionario" icon="ui-icon-pencil"
+						title="Editar">
+						<f:param name="funcionario" value="#{funcionario.codigo}" />
+					</p:button>
+					<p:commandButton icon="ui-icon-trash" title="Excluir"
+						oncomplete="PF('confirmacaoExclusao').show();" process="@this"
+						update=":frmPesquisa:confirmacaoExclusaoDialog">
+						<f:setPropertyActionListener
+							target="#{pesquisaFuncionarioBean.funcionarioSelecionado}"
+							value="#{funcionario}" />
+					</p:commandButton>
+				</p:column>
+
+				<p:rowExpansion>
+					<p:panelGrid columns="4" layout="grid"
+						columnClasses="ui-grid-col-2, ui-grid-col-4, ui-grid-col-2, ui-grid-col-4"
+						styleClass="panelgrid-noborder">
+
+						<h:outputText value="Nome do funcionário:" />
+						<h:outputText value="#{funcionario.nome}" />
+
+						<h:outputText value="Data de nascimento:" />
+						<h:outputText value="#{funcionario.dataNascimento}" />
+
+						<h:outputText value="Endereço:" />
+						<h:outputText value="#{funcionario.endereco}" />
+
+						<h:outputText value="Cidade:" />
+						<h:outputText value="#{funcionario.cidade}" />
+
+						<h:outputText value="Estado:" />
+						<h:outputText value="#{funcionario.estado.descricao}" />
+
+						<h:outputText value="Celular:" />
+						<h:outputText value="#{funcionario.celular}" />
+
+						<h:outputText value="Cpf:" />
+						<h:outputText value="#{funcionario.cpf}" />
+
+						<h:outputText value="Sexo:" />
+						<h:outputText value="#{funcionario.sexo.descricao}" />
+
+						<h:outputText value="Matrícula:" />
+						<h:outputText value="#{funcionario.matricula}" />
+
+					</p:panelGrid>
+				</p:rowExpansion>
+
+			</p:dataTable>
+
+			<p:confirmDialog id="confirmacaoExclusaoDialog"
+				widgetVar="confirmacaoExclusao"
+				message="Tem certeza que deseja excluir o funcionario #{pesquisaFuncionarioBean.funcionarioSelecionado.nome}?"
+				header="Exclusão de funcionario" severity="alert">
+				<p:commandButton value="Não"
+					onclick="PF('confirmacaoExclusao').hide(); return false;" />
+				<p:commandButton value="Sim" update=":frmPesquisa:funcionariosTable"
+					oncomplete="PF('confirmacaoExclusao').hide();"
+					action="#{pesquisaFuncionarioBean.excluir}" />
+			</p:confirmDialog>
+
+		</h:form>
+	</ui:define>
+</ui:composition>

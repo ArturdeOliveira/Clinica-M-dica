@@ -1,0 +1,35 @@
+<ui:composition template="/WEB-INF/template/LayoutPadrao.xhtml"
+	xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+
+	<ui:define name="corpo">
+		<h1 class="aw-page-title">Frameworks de desenvolvimento</h1>
+
+		<h:form id="frm">
+			<p:fieldset legend="Primefaces" style="margin-bottom:20px">
+				<h:panelGrid columns="2" cellpadding="5">
+					<h:graphicImage library="sistemaweb"
+						name="images/logo-primefaces.png" />
+					<p>PrimeFaces é um framework open source popular para
+						JavaServer Faces com mais de 100 componentes, toque mobilekit
+						otimizado, quadro empurrão, a validação do lado do cliente, motor
+						do tema e muito mais.</p>
+				</h:panelGrid>
+			</p:fieldset>
+			<p:fieldset legend="Hibernate" style="margin-bottom:20px">
+				<h:panelGrid columns="2" cellpadding="5">
+					<h:graphicImage library="sistemaweb" name="images/logo-hibernate.png" />
+					<p>Hibernate ORM permite que os desenvolvedores a escrever mais
+						facilmente aplicações cujos dados sobrevive ao processo de
+						candidatura. Como um quadro Objeto / Relational Mapping (ORM),
+						Hibernate está preocupado com a persistência de dados como se
+						aplica a bancos de dados relacionais (via JDBC).</p>
+				</h:panelGrid>
+			</p:fieldset>
+		</h:form>
+	</ui:define>
+
+</ui:composition>

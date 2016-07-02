@@ -1,0 +1,103 @@
+<!DOCTYPE html >
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+
+<h:head>
+	<f:facet name="first">
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+	</f:facet>
+
+	<title>Sistema web</title>
+
+	<h:outputStylesheet library="sistemaweb" name="styles/custom.css" />
+	<h:outputStylesheet library="sistemaweb" name="styles/layout.css" />
+	<h:outputStylesheet library="sistemaweb" name="styles/components.css" />
+
+	<h:outputScript target="body" library="primefaces"
+		name="jquery/jquery.js" />
+	<h:outputScript target="body" library="sistemaweb"
+		name="javascripts/app.js" />
+
+</h:head>
+
+<h:body>
+
+	<header class="aw-topbar">
+	<!--<h:graphicImage library="sistemaweb" name="images/logomarca.png" /> -->
+		
+		<a href="#" class="aw-toggle  js-toggle"><i class="fa  fa-bars"></i></a>
+
+		<span
+			style="float: right; height: 30px; line-height: 100px; margin-right: 20px; font-family: Century Gothic; font-size: 12px; color: #ffffff">
+			Olá, #{seguranca.nomeUsuario} ! </span>
+
+	</header>
+
+	<aside class="aw-sidebar  js-sidebar">
+		<nav class="aw-menu">
+			<ul>
+				<li><h:link outcome="/Home.xhtml">
+						<i class="fa  fa-fw  fa-home"></i>Home</h:link></li>
+				<li><h:link>
+						<i class="fa  fa-fw  fa-arrow-down"></i>Cadastros</h:link>
+					<ul>
+						<li><h:link outcome="/usuarios/PesquisaUsuarios.xhtml">
+								<i class="fa  fa-fw  fa-group"></i>Usuários</h:link></li>
+						<li><h:link outcome="/medicamento/PesquisaMedicamentos.xhtml">
+								<i class="fa  fa-fw  fa-flask"></i>Medicamentos</h:link></li>
+						<li><h:link outcome="/exame/PesquisaExames.xhtml">
+								<i class="fa  fa-fw  fa-stethoscope"></i>Exames</h:link></li>
+						<li><h:link
+								outcome="/especialidade/PesquisaEspecialidades.xhtml">
+								<i class="fa  fa-fw  fa-medkit"></i>Especialidades</h:link></li>
+						<li><h:link outcome="/medico/PesquisaMedicos.xhtml">
+								<i class="fa  fa-fw  fa-user-md"></i>Médicos</h:link></li>
+						<li><h:link outcome="/paciente/PesquisaPacientes.xhtml">
+								<i class="fa  fa-fw  fa-child"></i>Pacientes</h:link></li>
+						<li><h:link outcome="/funcionario/PesquisaFuncionarios.xhtml">
+								<i class="fa  fa-fw  fa-street-view"></i>Funcionários</h:link></li>
+					</ul></li>
+				<li><h:link outcome="/prontuario/PesquisaProntuarios.xhtml">
+						<i class="fa  fa-fw  fa-file-powerpoint-o"></i>Prontuários</h:link></li>
+				<li><h:link outcome="/agenda/PesquisaAgenda.xhtml">
+						<i class="fa  fa-fw  fa-calendar"></i>Agenda</h:link></li>
+				<p:menubar style="border-style: none; ">
+					<p:menuitem style="font-family: Impact, Charcoal, sans-serif"
+						icon="ui-icon-extlink" value="Sair"
+						url="/j_spring_security_logout" />
+				</p:menubar>
+
+			</ul>
+		</nav>
+	</aside>
+
+	<section class="aw-content  js-content">
+		<ui:insert name="corpo" />
+		<p:outputPanel deferred="true" deferredMode="visible"
+			style="color: #00162d; margin-top:20px;">
+			<h4 style="float: left;">© Copyright 2016 - Sistema web - Todos os Direitos Reservados. Alunos: Artur Ferreira e Jefferson
+				Sampaio.</h4>
+			<h3 style="float: right;">
+				<h:link href="#"
+					style="float: right; font-size: 20px; color: #002b55">
+					<i class="fa  fa-fw  fa-twitter-square"></i>
+				</h:link>
+				<h:link href="#"
+					style="float: right;font-size: 20px; color: #002b55">
+					<i class="fa  fa-fw  fa-instagram"></i>
+				</h:link>
+				<h:link href="#"
+					style="float: right; font-size: 20px; color: #002b55	">
+					<i class="fa  fa-fw  fa-facebook-square"></i>
+				</h:link>
+			</h3>
+		</p:outputPanel>
+	</section>
+
+</h:body>
+
+</html>

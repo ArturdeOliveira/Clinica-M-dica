@@ -1,0 +1,134 @@
+<ui:composition template="/WEB-INF/template/LayoutPadrao.xhtml"
+	xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui" xmlns:o="http://omnifaces.org/ui">
+
+	<ui:define name="corpo">
+		<h1 class="aw-page-title">Cadastro de médicos</h1>
+		<f:metadata>
+			<o:viewParam name="medico" value="#{cadastroMedicoBean.medico}" />
+		</f:metadata>
+
+		<h:form id="frmCadastro" enctype="multipart/form-data">
+			<p:toolbar>
+				<p:toolbarGroup>
+					<p:commandButton value="Salvar" icon="ui-icon-disk" update="@form"
+						id="botaoSalvar" action="#{cadastroMedicoBean.salvar}" ajax="false" />
+				</p:toolbarGroup>
+				<p:toolbarGroup align="right">
+					<p:button value="Pesquisa" icon="ui-icon-folder-collapsed"
+						outcome="/medico/PesquisaMedicos.xhtml" />
+				</p:toolbarGroup>
+			</p:toolbar>
+
+			<p:messages id="messages" autoUpdate="true" closable="true" />
+
+			<div class="ui-fluid">
+				<p:tabView style="margin-top: 10px">
+					<p:tab title="Dados básicos">
+						<p:panelGrid columns="2" layout="grid"
+							columnClasses="ui-grid-col-2, ui-grid-col-4, ui-grid-col-2, ui-grid-col-4"
+							styleClass="panelgrid-noborder">
+
+							<p:outputLabel value="Nome" for="nome" />
+							<p:inputText id="nome" required="true"
+								requiredMessage="Nome é obrigatório!"
+								value="#{cadastroMedicoBean.medico.nome}">
+							</p:inputText>
+
+							<p:outputLabel value="Especialidade" for="especialidade" />
+							<p:selectOneMenu id="especialidade" filter="true"
+								filterMatchMode="contains" required="true"
+								requiredMessage="Especialidade é obrigatório!"
+								value="#{cadastroMedicoBean.medico.especialidade}">
+								<f:selectItem itemLabel="Selecione a especialidade" />
+								<f:selectItems value="#{cadastroMedicoBean.especialidades}"
+									var="especialidade" itemLabel="#{especialidade.nome}"
+									itemValue="#{especialidade}" />
+							</p:selectOneMenu>
+
+							<p:outputLabel value="Foto" for="foto" />
+							<h:panelGroup>
+								<p:commandButton
+									rendered="#{cadastroMedicoBean.medico.hasFoto()}"
+									icon="ui-icon-extlink" title="Imagem" process="@this"
+									oncomplete="PF('mostraImagem').show()"
+									update="@form">
+									<f:setPropertyActionListener
+										target="#{fotoMedicoBean.medicoSelecionado}"
+										value="#{cadastroMedicoBean.medico}" />
+								</p:commandButton>
+								<p:fileUpload style="margin-top: 20px" id="foto" value="#{cadastroMedicoBean.fotoMedico}"
+									mode="simple" />
+							</h:panelGroup>
+							
+							<p:outputLabel value="Data de nascimento" for="dataNascimento" />
+							<p:calendar id="dataNascimento" required="true"
+								requiredMessage="Data de nascimento é obrigatório!"
+								value="#{cadastroMedicoBean.medico.dataNascimento}"
+								pattern="dd/MM/yyyy" mask="99/99/9999">
+							</p:calendar>
+
+							<p:outputLabel value="Endereço" for="endereco" />
+							<p:inputText id="endereco" required="true"
+								requiredMessage="Endereço é obrigatório!"
+								value="#{cadastroMedicoBean.medico.endereco}">
+							</p:inputText>
+
+							<p:outputLabel value="Cidade" for="cidade" />
+							<p:inputText id="cidade" required="true"
+								requiredMessage="Cidade é obrigatório!"
+								value="#{cadastroMedicoBean.medico.cidade}">
+							</p:inputText>
+
+							<p:outputLabel value="Uf" for="estado" />
+							<p:selectOneMenu id="estado" required="true"
+								requiredMessage="Estado é obrigatório!"
+								value="#{cadastroMedicoBean.medico.estado}">
+								<f:selectItem itemLabel="Selecione o estado" />
+								<f:selectItems value="#{cadastroMedicoBean.estados}"
+									var="estado" itemLabel="#{estado.descricao}"
+									itemValue="#{estado}" />
+							</p:selectOneMenu>
+
+							<p:outputLabel value="celular" for="celular" />
+							<p:inputMask id="celular" required="true"
+								requiredMessage="Celular é obrigatório!"
+								value="#{cadastroMedicoBean.medico.celular}"
+								mask="(99)99999-9999">
+							</p:inputMask>
+
+							<p:outputLabel value="CPF" for="cpf" />
+							<p:inputMask id="cpf" value="#{cadastroMedicoBean.medico.cpf}"
+								title="Digite um cpf válido." mask="999.999.999-99">
+								<p:tooltip showEvent="focus" hideEvent="blur" />
+							</p:inputMask>
+
+							<p:outputLabel value="Sexo" for="sexo" />
+							<p:selectOneMenu id="sexo" required="true"
+								requiredMessage="Sexo é obrigatório!"
+								value="#{cadastroMedicoBean.medico.sexo}">
+								<f:selectItem itemLabel="Selecione o sexo" />
+								<f:selectItems value="#{cadastroMedicoBean.sexos}" var="sexo"
+									itemLabel="#{sexo.descricao}" itemValue="#{sexo}" />
+							</p:selectOneMenu>
+
+							<p:outputLabel value="Crm" for="crm" />
+							<p:inputMask id="crm" required="true"
+								requiredMessage="Crm é obrigatório!"
+								value="#{cadastroMedicoBean.medico.crm}" mask="9999">
+							</p:inputMask>
+
+						</p:panelGrid>
+						<p:dialog id="mostraImagemDialog" header="Imagem"
+							widgetVar="mostraImagem" modal="true" closeOnEscape="true">
+							<p:graphicImage value="#{fotoMedicoBean.foto}" cache="false" />
+						</p:dialog>
+					</p:tab>
+				</p:tabView>
+			</div>
+		</h:form>
+	</ui:define>
+</ui:composition>
