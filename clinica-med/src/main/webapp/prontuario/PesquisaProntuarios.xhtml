@@ -107,10 +107,13 @@
 					</p:commandButton>
 				</p:column>
 				<p:rowExpansion>
-					<p:panelGrid columns="4" layout="grid"
+					<p:panelGrid columns="2" layout="grid"
 						columnClasses="ui-grid-col-2, ui-grid-col-4, ui-grid-col-2, ui-grid-col-4"
 						styleClass="panelgrid-noborder">
-
+						
+						<h3>Dados básicos</h3>
+						<h:outputText/>
+						
 						<h:outputText value="Nome do paciente:" />
 						<h:outputText value="#{prontuario.paciente.nome}" />
 
@@ -128,7 +131,10 @@
 
 						<h:outputText value="Pressão arterial:" />
 						<h:outputText value="#{prontuario.pressao}" />
-
+						
+						<h3>Anamnese</h3>
+						<h:outputText/>
+						
 						<h:outputText value="Queixa principal?" />
 						<h:outputText value="#{prontuario.queixa}" />
 
@@ -153,9 +159,15 @@
 
 						<h:outputText value="Possui algum tipo de doença?" />
 						<h:outputText value="#{prontuario.doenca}" />
-
+						
+						<h3>Descrição</h3>
+						<h:outputText/>
+						
 						<h:outputText value="Descrição da medicação:" />
 						<h:outputText value="#{prontuario.descricao}" />
+						
+						<h3>Exames</h3>
+						<h:outputText/>
 						
 						<h:outputText value="Médico solicitante:" />
 						<h:outputText value="#{prontuario.medico.nome}" />
